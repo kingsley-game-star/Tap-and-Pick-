@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tap & Pick — Party Challenge</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at top,#4b174f 0,#160c20 45%,#08070d 100%);color:#fff;display:flex;justify-content:center;align-items:center;padding:18px}
+.app{width:min(520px,100%);text-align:center}
+.badge{display:inline-block;padding:7px 13px;border:1px solid #ffffff2b;border-radius:999px;background:#ffffff0d;font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+h1{font-size:clamp(32px,9vw,52px);margin:14px 0 4px;line-height:1} 
+.sub{opacity:.7;margin:0 0 22px}
+.card{min-height:280px;border:1px solid #ffffff20;border-radius:28px;background:linear-gradient(145deg,#ffffff13,#ffffff06);box-shadow:0 18px 60px #0008;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:28px;position:relative;overflow:hidden}
+.number{font-size:13px;opacity:.55;margin-bottom:16px}
+.challenge{font-size:clamp(21px,5.6vw,29px);font-weight:750;line-height:1.3}
+button{border:0;color:#fff;font-weight:800;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pick{margin-top:22px;width:100%;padding:19px;border-radius:18px;background:linear-gradient(135deg,#ff3d81,#9c38ff);font-size:19px;box-shadow:0 12px 30px #b32d8750;transition:.15s}
+.pick:active{transform:scale(.97)}
+.pick:disabled{opacity:.45;cursor:not-allowed}
+.reset{margin-top:12px;padding:12px 20px;border-radius:13px;background:#ffffff12;border:1px solid #ffffff20;font-size:14px}
+.progress{height:7px;background:#ffffff12;border-radius:99px;margin:18px 0 0;overflow:hidden}
+.bar{height:100%;width:100%;background:linear-gradient(90deg,#ff3d81,#a83cff);transition:width .3s}
+.status{margin-top:9px;font-size:12px;opacity:.55}
+.flash{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.92);opacity:.2}100%{transform:scale(1);opacity:1}}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#ff3d81">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tap & Pick">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+</head>
+<body>
+<div class="app">
+  <span class="badge">Party Game • 100 Challenges</span>
+  <h1>Tap & Pick 🎯</h1>
+  <p class="sub">Tap once. Get one random challenge. No repeats.</p>
+  <div class="card">
+    <div class="number" id="number">Ready?</div>
+    <div class="challenge" id="challenge">TAP TO PICK YOUR FIRST CHALLENGE</div>
+  </div>
+  <button class="pick" id="pick">🎲 TAP TO PICK</button>
+  <button class="reset" id="reset">↻ Reset & Shuffle</button>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="status" id="status">100 challenges remaining</div>
+</div>
+<script>
+const allChallenges = ["😏 Loser: Give the birthday person your best seductive smile for 10 seconds.", "💋 Loser: Give someone a quick peck on the cheek—only if they agree.", "😂 Loser: Dance like you're trying to impress your crush.", "😉 Loser: Give someone a flirty compliment without laughing.", "💋 Loser: Ask someone, “Can I get a cheek kiss?” If they say yes, give them a quick peck.", "😈 Loser: Say “You look dangerously good tonight” to someone in the room.", "👀 Loser: Maintain intense eye contact with another player for 15 seconds.", "💋 Loser: Give the birthday person a sweet cheek kiss and wish them happy birthday.", "😂 Loser: Pretend you're flirting with a waiter/waitress and order an imaginary drink.", "😎 Loser: Walk across the room like you're on a romantic runway.", "🔥 Loser: Give your best 15-second twerk dance.", "😏 Loser: Say “Stop looking at me like that” while nobody is looking at you.", "💕 Loser: Describe your ideal date in exactly five words.", "💋 Loser: Give someone a friendly cheek kiss and immediately strike a dramatic pose.", "😉 Loser: Say “I think you're my type” to someone chosen by the group.", "🔥 Loser: Give a 20-second seductive dance without touching anyone.", "😂 Loser: Pretend you're proposing marriage to the birthday cake.", "😏 Loser: Give your most dramatic “come here” gesture.", "💋 Loser: Ask the person beside you for a quick cheek peck.", "💃 Loser: Do your best lap-dance-style chair dance for 20 seconds—no touching anyone.", "💃 Loser: Do your best 15-second dance.", "💋 Loser: Give the birthday person a quick peck on the cheek and say, “Birthday blessings!”", "😂 Loser: Walk like a model while everyone judges your runway skills.", "😏 Loser: Give your best “I know I'm attractive” pose.", "🔥 Loser: Show everyone your funniest twerking technique for 15 seconds.", "😈 Loser: Ask someone, “Would you accept a birthday cheek kiss from me?” If yes, give them one.", "🤣 Loser: Tell the group your funniest flirting failure.", "👀 Loser: Pick someone and compliment their eyes dramatically.", "🎤 Loser: Sing a romantic song to a random object.", "💋 Loser: Give someone a cheek peck, then immediately act shy and walk away.", "💃 Loser: Give a 20-second breakdance performance using only moves you can safely do.", "💋 Loser: Give a quick cheek peck to someone who volunteers.", "🔥 Loser: Do a 15-second “hot celebrity” impression.", "🤣 Loser: Pretend you're auditioning to be someone's boyfriend/girlfriend.", "💋 Loser: Give someone a cheek kiss and say, “That was your prize for being cute.”", "🔥 Loser: Do a slow, dramatic chair dance like you're starring in a music video.", "😂 Loser: Flirt with a chair for 20 seconds.", "👑 Loser: Act like everyone in the room has a crush on you.", "💋 Loser: Give your chosen person a quick cheek peck and a dramatic wink.", "🤣 Loser: Pretend you're heartbroken because nobody chose you.", "🎂 Loser: Give the birthday person a ridiculously romantic birthday wish.", "💋 Loser: Give the birthday person a cheek peck and say, “That's your birthday blessing.”", "😂 Loser: Pretend the birthday person is your secret crush.", "💋 Loser: Blow a kiss to the birthday person, then give them a cheek peck if they agree.", "🔥 Loser: Give the birthday person a 10-second hype speech like they're a superstar.", "😈 Loser: Tell the birthday person one thing that makes them dangerously charming.", "💋 Loser: Ask the birthday person for a cheek kiss. If they agree, exchange a quick peck.", "💕 Loser: Give them your best romantic birthday toast.", "😏 Loser: Say, “I didn't come for the party, I came for you.”", "💋 Loser: Give someone a cheek peck and say, “Congratulations, you survived my charm.”", "🔥 Loser: Freestyle a seductive dance to a song chosen by the group.", "💋 Loser: Choose someone who agrees and give them a quick cheek peck.", "😈 Loser: Tell the birthday person why they're “a dangerous person to fall for.”", "😂 Loser: Pretend you're asking the birthday person out on a first date.", "💋 Loser: Give the birthday person a cheek peck and pose like you're in a romantic movie.", "🔥 Loser: Do a 20-second slow-motion dance like you're in a music video.", "😂 Loser: Pretend you're their biggest fan.", "💋 Loser: Give someone a quick cheek kiss and say, “Don't get used to this.”", "😈 Loser: Say, “You'd be trouble,” to someone chosen by the group.", "🎂 Loser: Give the birthday person a dramatic birthday toast.", "😏 Loser: Do your best “I woke up looking this good” pose.", "🔥 Loser: Twerk to the chorus of a song chosen by the group.", "📸 Loser: Take your funniest model pose.", "😈 Loser: Say “Don't tempt me” dramatically to someone.", "💋 Loser: Give someone a cheek peck and immediately say, “Okay, we're even.”", "🔥 Loser: Do a 10-second confident strut.", "😏 Loser: Say your smoothest one-liner without smiling.", "💋 Loser: Ask someone for a cheek kiss and accept their answer either way.", "😂 Loser: Pretend you're starring in a cheesy romance movie.", "😈 Loser: Say “I wasn't flirting… unless you liked it.”", "💃 Loser: Challenge yourself to a 20-second breakdance freestyle.", "😂 Loser: Pretend you're in a perfume commercial.", "😏 Loser: Give your best “mysterious stranger” introduction.", "💋 Loser: Let another player choose between giving you a cheek peck or receiving one from you.", "🔥 Loser: Create your own seductive dance move and give it a ridiculous name.", "👀 Loser: Pick someone and say, “You'd be trouble.”", "💋 Loser: Give someone a cheek peck and then give them a dramatic wink.", "😂 Loser: Pretend you're someone's celebrity crush.", "😏 Loser: Give your best “first date” greeting.", "🔥 Loser: Do a playful lap-dance-style chair routine for 20 seconds without touching anyone.", "😂 Loser: Explain why losing this game proves you're the most attractive person here.", "😈 Loser: Give yourself a ridiculous romantic nickname.", "💋 Loser: Give a willing player a quick cheek peck and say, “My defeat has consequences.”", "🔥 Loser: Perform a 20-second twerk battle against an imaginary opponent.", "🔥 Loser: Do your best seductive slow dance while maintaining eye contact with the camera.", "💋 Loser: Give the birthday person a cheek peck and say, “Happy birthday, superstar!”", "😂 Loser: Pretend you're being interviewed about your love life.", "😏 Loser: Give the room your best “single and available” announcement.", "💃 Loser: Perform your funniest breakdance move and finish with a dramatic pose.", "🤣 Loser: Explain why someone should date you in exactly three words.", "😈 Loser: Let the group choose your funniest nickname for the next three rounds.", "💋 Loser: Give someone a cheek peck, then run away dramatically.", "🔥 Loser: Give a 20-second “I'm single and dangerous” speech.", "😏 Loser: Pick someone and deliver your best movie-style flirtation.", "💃 Loser: Perform a 30-second seductive dance to any song the group chooses.", "😂 Loser: Pretend you've just discovered your crush is in the room.", "💋 Loser: Give the birthday person a cheek peck and say, “You owe me for making me lose!”", "🔥 Loser: Perform your best 30-second confidence dance.", "😂 Loser: Stand up and announce, “I lost Choozy, but apparently I won the flirting competition!”", "💀🔥 ULTIMATE LOSER: Do a 30-second freestyle combining twerking, breakdance, and seductive dance moves, finish with your best pose, and announce: “I ACCEPT DEFEAT… BUT I'M STILL THE MOST DANGEROUS PLAYER HERE!” 😈🔥😂"];
+let remaining = [];
+let picked = 0;
+
+const numberEl = document.getElementById('number');
+const challengeEl = document.getElementById('challenge');
+const pickBtn = document.getElementById('pick');
+const resetBtn = document.getElementById('reset');
+const statusEl = document.getElementById('status');
+const bar = document.getElementById('bar');
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function resetGame() {
+  remaining = shuffle([...allChallenges]);
+  picked = 0;
+  numberEl.textContent = 'Ready?';
+  challengeEl.textContent = 'TAP TO PICK YOUR FIRST CHALLENGE';
+  pickBtn.disabled = false;
+  pickBtn.textContent = '🎲 TAP TO PICK';
+  updateStatus();
+}
+
+function updateStatus() {
+  const left = remaining.length;
+  statusEl.textContent = left === 0 ? 'All 100 challenges completed! 🎉' : `${left} challenge${left===1?'':'s'} remaining`;
+  bar.style.width = `${left / allChallenges.length * 100}%`;
+}
+
+function pickChallenge() {
+  if (!remaining.length) return;
+  const index = Math.floor(Math.random() * remaining.length);
+  const challenge = remaining.splice(index, 1)[0];
+  picked++;
+  numberEl.textContent = `Challenge ${picked} of ${allChallenges.length}`;
+  challengeEl.textContent = challenge;
+  challengeEl.classList.remove('flash');
+  void challengeEl.offsetWidth;
+  challengeEl.classList.add('flash');
+  if (!remaining.length) {
+    pickBtn.disabled = true;
+    pickBtn.textContent = '🎉 ALL DONE!';
+  }
+  updateStatus();
+}
+
+pickBtn.addEventListener('click', pickChallenge);
+resetBtn.addEventListener('click', resetGame);
+resetGame();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
+}
+</script>
+</body>
+</html>

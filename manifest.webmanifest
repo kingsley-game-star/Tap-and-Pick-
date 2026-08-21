@@ -1,0 +1,25 @@
+{
+  "name": "Tap & Pick — Party Challenges",
+  "short_name": "Tap & Pick",
+  "description": "A random party challenge game with 100 unique loser challenges and no repeats until all are used.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#08070d",
+  "theme_color": "#ff3d81",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
