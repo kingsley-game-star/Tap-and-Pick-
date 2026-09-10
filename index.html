@@ -2,114 +2,1688 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Tap & Pick — Party Challenge</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at top,#4b174f 0,#160c20 45%,#08070d 100%);color:#fff;display:flex;justify-content:center;align-items:center;padding:18px}
-.app{width:min(520px,100%);text-align:center}
-.badge{display:inline-block;padding:7px 13px;border:1px solid #ffffff2b;border-radius:999px;background:#ffffff0d;font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
-h1{font-size:clamp(32px,9vw,52px);margin:14px 0 4px;line-height:1} 
-.sub{opacity:.7;margin:0 0 22px}
-.card{min-height:280px;border:1px solid #ffffff20;border-radius:28px;background:linear-gradient(145deg,#ffffff13,#ffffff06);box-shadow:0 18px 60px #0008;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:28px;position:relative;overflow:hidden}
-.number{font-size:13px;opacity:.55;margin-bottom:16px}
-.challenge{font-size:clamp(21px,5.6vw,29px);font-weight:750;line-height:1.3}
-button{border:0;color:#fff;font-weight:800;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.pick{margin-top:22px;width:100%;padding:19px;border-radius:18px;background:linear-gradient(135deg,#ff3d81,#9c38ff);font-size:19px;box-shadow:0 12px 30px #b32d8750;transition:.15s}
-.pick:active{transform:scale(.97)}
-.pick:disabled{opacity:.45;cursor:not-allowed}
-.reset{margin-top:12px;padding:12px 20px;border-radius:13px;background:#ffffff12;border:1px solid #ffffff20;font-size:14px}
-.progress{height:7px;background:#ffffff12;border-radius:99px;margin:18px 0 0;overflow:hidden}
-.bar{height:100%;width:100%;background:linear-gradient(90deg,#ff3d81,#a83cff);transition:width .3s}
-.status{margin-top:9px;font-size:12px;opacity:.55}
-.flash{animation:pop .35s ease}
-@keyframes pop{0%{transform:scale(.92);opacity:.2}100%{transform:scale(1);opacity:1}}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#ff3d81">
+<title>Tap & Pick — After Dark</title>
+
+<meta name="theme-color" content="#09060f">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tap & Pick">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#08060d;
+  --panel:#12101a;
+  --panel2:#191421;
+  --pink:#ff267d;
+  --purple:#873cff;
+  --red:#ff315d;
+  --gold:#ffc857;
+  --text:#fff;
+  --muted:#9f98aa;
+  --border:#ffffff15;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+}
+
+body{
+  min-height:100vh;
+  padding:16px;
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  display:flex;
+  justify-content:center;
+  overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  width:450px;
+  height:450px;
+  left:-180px;
+  top:-180px;
+  border-radius:50%;
+  background:#ff167b20;
+  filter:blur(90px);
+  pointer-events:none;
+}
+
+body:after{
+  content:"";
+  position:fixed;
+  width:450px;
+  height:450px;
+  right:-200px;
+  bottom:-180px;
+  border-radius:50%;
+  background:#7b36ff20;
+  filter:blur(90px);
+  pointer-events:none;
+}
+
+.app{
+  width:min(520px,100%);
+  position:relative;
+  z-index:2;
+}
+
+/* ---------- SCREENS ---------- */
+
+.screen{
+  display:none;
+  animation:screenIn .4s ease;
+}
+
+.screen.active{
+  display:block;
+}
+
+@keyframes screenIn{
+  from{
+    opacity:0;
+    transform:translateY(15px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ---------- HOME ---------- */
+
+.brand{
+  text-align:center;
+  padding-top:20px;
+}
+
+.logo{
+  width:82px;
+  height:82px;
+  margin:auto;
+  border-radius:27px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 18px 55px #ff267d45;
+}
+
+.brand h1{
+  margin:18px 0 4px;
+  font-size:clamp(40px,11vw,58px);
+  line-height:.95;
+  letter-spacing:-2px;
+}
+
+.gradient{
+  background:linear-gradient(90deg,#ff4b99,#b85cff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.afterdark{
+  color:#ff4e95;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+.tagline{
+  color:var(--muted);
+  margin:10px 0 25px;
+}
+
+.panel{
+  padding:20px;
+  border-radius:27px;
+  background:linear-gradient(145deg,#ffffff0c,#ffffff04);
+  border:1px solid var(--border);
+  box-shadow:0 25px 80px #0009;
+  backdrop-filter:blur(20px);
+}
+
+.warning{
+  padding:13px;
+  border-radius:15px;
+  background:#ff315d0d;
+  border:1px solid #ff315d25;
+  color:#d6cfdb;
+  font-size:12px;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+.warning b{
+  color:#ff5e8b;
+}
+
+label{
+  display:block;
+  margin:0 0 8px;
+  color:#bdb6c8;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  outline:none;
+  background:#ffffff09;
+  color:#fff;
+  font-size:16px;
+}
+
+input:focus{
+  border-color:#ff3c88;
+  box-shadow:0 0 0 3px #ff3c8815;
+}
+
+.sectionTitle{
+  font-size:12px;
+  color:#aaa2b2;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.categories{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-bottom:20px;
+}
+
+.cat{
+  border:1px solid var(--border);
+  background:#ffffff07;
+  color:#fff;
+  text-align:left;
+  padding:14px;
+  border-radius:16px;
+  cursor:pointer;
+  transition:.18s;
+}
+
+.cat:active{
+  transform:scale(.97);
+}
+
+.cat.selected{
+  border-color:#ff3c88;
+  background:#ff267d15;
+  box-shadow:0 0 20px #ff267d12;
+}
+
+.cat b{
+  display:block;
+  font-size:14px;
+  margin-bottom:3px;
+}
+
+.cat span{
+  display:block;
+  color:#918a9b;
+  font-size:10px;
+}
+
+.start{
+  width:100%;
+  padding:18px;
+  border:0;
+  border-radius:17px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 15px 35px #b12c7650;
+}
+
+.footerNote{
+  text-align:center;
+  color:#696271;
+  font-size:10px;
+  margin:18px 0;
+}
+
+/* ---------- GAME ---------- */
+
+.gameHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 0 15px;
+}
+
+.playerBox{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border-radius:13px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.playerName{
+  font-weight:850;
+  font-size:14px;
+}
+
+.roundText{
+  color:#81798d;
+  font-size:10px;
+}
+
+.stats{
+  display:flex;
+  gap:7px;
+}
+
+.stat{
+  padding:9px 11px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#ffffff08;
+  font-size:12px;
+  font-weight:800;
+}
+
+.categoryBadge{
+  width:max-content;
+  margin:0 auto 12px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:#ff267d12;
+  border:1px solid #ff267d25;
+  color:#ff5c9d;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.2px;
+}
+
+.card{
+  min-height:375px;
+  padding:32px 23px;
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 50% 0%,#ff287d12,transparent 45%),
+    linear-gradient(145deg,#1a1522,#0f0c15);
+  border:1px solid #ffffff17;
+  box-shadow:0 25px 80px #000b;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  overflow:hidden;
+  position:relative;
+}
+
+.card:before{
+  content:"";
+  position:absolute;
+  width:170px;
+  height:170px;
+  border-radius:50%;
+  top:-90px;
+  left:-60px;
+  background:#873cff1c;
+  filter:blur(25px);
+}
+
+.cardNumber{
+  position:relative;
+  color:#716a7a;
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:24px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.question{
+  position:relative;
+  font-size:clamp(22px,6vw,31px);
+  font-weight:850;
+  line-height:1.3;
+  max-width:440px;
+}
+
+.question.animate{
+  animation:questionPop .4s ease;
+}
+
+@keyframes questionPop{
+  0%{
+    opacity:0;
+    transform:scale(.84) translateY(12px);
+  }
+  100%{
+    opacity:1;
+    transform:scale(1) translateY(0);
+  }
+}
+
+.points{
+  position:relative;
+  margin-top:25px;
+  color:#ffc857;
+  font-size:11px;
+  font-weight:900;
+}
+
+.mainAction{
+  width:100%;
+  margin-top:17px;
+  padding:18px;
+  border:0;
+  border-radius:18px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 14px 38px #ff287d35;
+}
+
+.mainAction:active{
+  transform:scale(.98);
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:10px;
+}
+
+.actionBtn{
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:#ffffff08;
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.progress{
+  height:6px;
+  margin-top:17px;
+  border-radius:99px;
+  background:#ffffff0c;
+  overflow:hidden;
+}
+
+.progressBar{
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,var(--pink),var(--purple));
+  transition:.35s;
+}
+
+.remaining{
+  text-align:center;
+  margin-top:8px;
+  color:#756f7e;
+  font-size:10px;
+}
+
+/* ---------- RESULT ---------- */
+
+.result{
+  text-align:center;
+  padding-top:60px;
+}
+
+.resultIcon{
+  font-size:70px;
+  animation:float 2s ease-in-out infinite;
+}
+
+@keyframes float{
+  50%{transform:translateY(-8px)}
+}
+
+.result h2{
+  font-size:39px;
+  margin:15px 0 5px;
+}
+
+.resultSub{
+  color:var(--muted);
+}
+
+.finalScore{
+  font-size:58px;
+  font-weight:950;
+  margin:25px 0 0;
+  background:linear-gradient(90deg,#ff4c97,#a85cff);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.scoreLabel{
+  color:#777080;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+
+.resultStats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin:25px 0;
+}
+
+.resultStat{
+  padding:18px 10px;
+  border-radius:18px;
+  background:#ffffff08;
+  border:1px solid var(--border);
+}
+
+.resultStat b{
+  display:block;
+  font-size:22px;
+}
+
+.resultStat span{
+  color:#777080;
+  font-size:10px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media(max-width:380px){
+  body{padding:12px}
+  .card{min-height:340px;padding:25px 18px}
+  .question{font-size:21px}
+  .brand h1{font-size:42px}
+}
+
+button{
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+
+</style>
 </head>
+
 <body>
+
 <div class="app">
-  <span class="badge">Party Game • 100 Challenges</span>
-  <h1>Tap & Pick 🎯</h1>
-  <p class="sub">Tap once. Get one random challenge. No repeats.</p>
-  <div class="card">
-    <div class="number" id="number">Ready?</div>
-    <div class="challenge" id="challenge">TAP TO PICK YOUR FIRST CHALLENGE</div>
+
+<!-- ================= HOME ================= -->
+
+<section class="screen active" id="home">
+
+  <div class="brand">
+
+    <div class="logo">😈</div>
+
+    <div class="afterdark">18+ After Dark Edition</div>
+
+    <h1>
+      <span class="gradient">Tap & Pick</span>
+    </h1>
+
+    <p class="tagline">
+      One tap. One challenge. No hiding.
+    </p>
+
   </div>
-  <button class="pick" id="pick">🎲 TAP TO PICK</button>
-  <button class="reset" id="reset">↻ Reset & Shuffle</button>
-  <div class="progress"><div class="bar" id="bar"></div></div>
-  <div class="status" id="status">100 challenges remaining</div>
+
+  <div class="panel">
+
+    <div class="warning">
+      <b>🔞 ADULT PARTY GAME</b><br>
+      Designed for consenting adults. Players can skip any
+      challenge without pressure. Keep the party respectful.
+    </div>
+
+    <label>PLAYER NAME</label>
+
+    <input
+      id="playerInput"
+      type="text"
+      maxlength="20"
+      placeholder="Enter your name"
+      autocomplete="off"
+    >
+
+    <div class="sectionTitle">
+      CHOOSE YOUR VIBE
+    </div>
+
+    <div class="categories">
+
+      <button class="cat selected" data-category="all">
+        <b>🔥 Everything</b>
+        <span>Full After Dark deck</span>
+      </button>
+
+      <button class="cat" data-category="flirty">
+        <b>😏 Flirty</b>
+        <span>Attraction & tension</span>
+      </button>
+
+      <button class="cat" data-category="naughty">
+        <b>💋 Naughty</b>
+        <span>Bold questions</span>
+      </button>
+
+      <button class="cat" data-category="wild">
+        <b>🔥 Wild</b>
+        <span>Turn up the pressure</span>
+      </button>
+
+      <button class="cat" data-category="dare">
+        <b>😈 Dares</b>
+        <span>Do it or skip it</span>
+      </button>
+
+      <button class="cat" data-category="confession">
+        <b>👀 Confessions</b>
+        <span>No-lies zone</span>
+      </button>
+
+      <button class="cat" data-category="couples">
+        <b>❤️ Couples</b>
+        <span>For partners</span>
+      </button>
+
+      <button class="cat" data-category="ultimate">
+        <b>💀 Ultimate</b>
+        <span>Maximum boldness</span>
+      </button>
+
+    </div>
+
+    <button class="start" id="startBtn">
+      🔥 ENTER THE PARTY
+    </button>
+
+  </div>
+
+  <div class="footerNote">
+    18+ • Consent matters • No pressure • Play responsibly
+  </div>
+
+</section>
+
+
+<!-- ================= GAME ================= -->
+
+<section class="screen" id="game">
+
+  <div class="gameHeader">
+
+    <div class="playerBox">
+
+      <div class="avatar">😈</div>
+
+      <div>
+        <div class="playerName" id="playerDisplay">
+          Player
+        </div>
+
+        <div class="roundText" id="roundDisplay">
+          Ready?
+        </div>
+      </div>
+
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        🏆 <span id="score">0</span>
+      </div>
+
+      <div class="stat">
+        🔥 <span id="streak">0</span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="categoryBadge" id="categoryBadge">
+    EVERYTHING
+  </div>
+
+
+  <div class="card">
+
+    <div class="cardNumber" id="cardNumber">
+      READY?
+    </div>
+
+    <div class="question" id="question">
+      TAP THE BUTTON TO REVEAL YOUR CHALLENGE
+    </div>
+
+    <div class="points" id="points">
+      +10 POINTS
+    </div>
+
+  </div>
+
+
+  <button class="mainAction" id="pickBtn">
+    🎲 TAP TO PICK
+  </button>
+
+
+  <div class="actions">
+
+    <button class="actionBtn" id="skipBtn">
+      ⏭ SKIP
+    </button>
+
+    <button class="actionBtn" id="homeBtn">
+      🏠 EXIT
+    </button>
+
+  </div>
+
+
+  <div class="progress">
+    <div class="progressBar" id="progressBar"></div>
+  </div>
+
+  <div class="remaining" id="remaining">
+    1,000+ challenges remaining
+  </div>
+
+</section>
+
+
+<!-- ================= RESULT ================= -->
+
+<section class="screen" id="result">
+
+  <div class="result">
+
+    <div class="resultIcon">🏆</div>
+
+    <h2>PARTY COMPLETE</h2>
+
+    <p class="resultSub">
+      You survived the After Dark deck.
+    </p>
+
+    <div class="finalScore" id="finalScore">
+      0
+    </div>
+
+    <div class="scoreLabel">
+      FINAL SCORE
+    </div>
+
+    <div class="resultStats">
+
+      <div class="resultStat">
+        <b id="completed">0</b>
+        <span>COMPLETED</span>
+      </div>
+
+      <div class="resultStat">
+        <b id="skipped">0</b>
+        <span>SKIPPED</span>
+      </div>
+
+    </div>
+
+    <button class="start" id="againBtn">
+      🔥 PLAY AGAIN
+    </button>
+
+    <br><br>
+
+    <button class="actionBtn" id="resultHomeBtn">
+      🏠 BACK HOME
+    </button>
+
+  </div>
+
+</section>
+
 </div>
-<script>
-const allChallenges = ["😏 Loser: Give the birthday person your best seductive smile for 10 seconds.", "💋 Loser: Give someone a quick peck on the cheek—only if they agree.", "😂 Loser: Dance like you're trying to impress your crush.", "😉 Loser: Give someone a flirty compliment without laughing.", "💋 Loser: Ask someone, “Can I get a cheek kiss?” If they say yes, give them a quick peck.", "😈 Loser: Say “You look dangerously good tonight” to someone in the room.", "👀 Loser: Maintain intense eye contact with another player for 15 seconds.", "💋 Loser: Give the birthday person a sweet cheek kiss and wish them happy birthday.", "😂 Loser: Pretend you're flirting with a waiter/waitress and order an imaginary drink.", "😎 Loser: Walk across the room like you're on a romantic runway.", "🔥 Loser: Give your best 15-second twerk dance.", "😏 Loser: Say “Stop looking at me like that” while nobody is looking at you.", "💕 Loser: Describe your ideal date in exactly five words.", "💋 Loser: Give someone a friendly cheek kiss and immediately strike a dramatic pose.", "😉 Loser: Say “I think you're my type” to someone chosen by the group.", "🔥 Loser: Give a 20-second seductive dance without touching anyone.", "😂 Loser: Pretend you're proposing marriage to the birthday cake.", "😏 Loser: Give your most dramatic “come here” gesture.", "💋 Loser: Ask the person beside you for a quick cheek peck.", "💃 Loser: Do your best lap-dance-style chair dance for 20 seconds—no touching anyone.", "💃 Loser: Do your best 15-second dance.", "💋 Loser: Give the birthday person a quick peck on the cheek and say, “Birthday blessings!”", "😂 Loser: Walk like a model while everyone judges your runway skills.", "😏 Loser: Give your best “I know I'm attractive” pose.", "🔥 Loser: Show everyone your funniest twerking technique for 15 seconds.", "😈 Loser: Ask someone, “Would you accept a birthday cheek kiss from me?” If yes, give them one.", "🤣 Loser: Tell the group your funniest flirting failure.", "👀 Loser: Pick someone and compliment their eyes dramatically.", "🎤 Loser: Sing a romantic song to a random object.", "💋 Loser: Give someone a cheek peck, then immediately act shy and walk away.", "💃 Loser: Give a 20-second breakdance performance using only moves you can safely do.", "💋 Loser: Give a quick cheek peck to someone who volunteers.", "🔥 Loser: Do a 15-second “hot celebrity” impression.", "🤣 Loser: Pretend you're auditioning to be someone's boyfriend/girlfriend.", "💋 Loser: Give someone a cheek kiss and say, “That was your prize for being cute.”", "🔥 Loser: Do a slow, dramatic chair dance like you're starring in a music video.", "😂 Loser: Flirt with a chair for 20 seconds.", "👑 Loser: Act like everyone in the room has a crush on you.", "💋 Loser: Give your chosen person a quick cheek peck and a dramatic wink.", "🤣 Loser: Pretend you're heartbroken because nobody chose you.", "🎂 Loser: Give the birthday person a ridiculously romantic birthday wish.", "💋 Loser: Give the birthday person a cheek peck and say, “That's your birthday blessing.”", "😂 Loser: Pretend the birthday person is your secret crush.", "💋 Loser: Blow a kiss to the birthday person, then give them a cheek peck if they agree.", "🔥 Loser: Give the birthday person a 10-second hype speech like they're a superstar.", "😈 Loser: Tell the birthday person one thing that makes them dangerously charming.", "💋 Loser: Ask the birthday person for a cheek kiss. If they agree, exchange a quick peck.", "💕 Loser: Give them your best romantic birthday toast.", "😏 Loser: Say, “I didn't come for the party, I came for you.”", "💋 Loser: Give someone a cheek peck and say, “Congratulations, you survived my charm.”", "🔥 Loser: Freestyle a seductive dance to a song chosen by the group.", "💋 Loser: Choose someone who agrees and give them a quick cheek peck.", "😈 Loser: Tell the birthday person why they're “a dangerous person to fall for.”", "😂 Loser: Pretend you're asking the birthday person out on a first date.", "💋 Loser: Give the birthday person a cheek peck and pose like you're in a romantic movie.", "🔥 Loser: Do a 20-second slow-motion dance like you're in a music video.", "😂 Loser: Pretend you're their biggest fan.", "💋 Loser: Give someone a quick cheek kiss and say, “Don't get used to this.”", "😈 Loser: Say, “You'd be trouble,” to someone chosen by the group.", "🎂 Loser: Give the birthday person a dramatic birthday toast.", "😏 Loser: Do your best “I woke up looking this good” pose.", "🔥 Loser: Twerk to the chorus of a song chosen by the group.", "📸 Loser: Take your funniest model pose.", "😈 Loser: Say “Don't tempt me” dramatically to someone.", "💋 Loser: Give someone a cheek peck and immediately say, “Okay, we're even.”", "🔥 Loser: Do a 10-second confident strut.", "😏 Loser: Say your smoothest one-liner without smiling.", "💋 Loser: Ask someone for a cheek kiss and accept their answer either way.", "😂 Loser: Pretend you're starring in a cheesy romance movie.", "😈 Loser: Say “I wasn't flirting… unless you liked it.”", "💃 Loser: Challenge yourself to a 20-second breakdance freestyle.", "😂 Loser: Pretend you're in a perfume commercial.", "😏 Loser: Give your best “mysterious stranger” introduction.", "💋 Loser: Let another player choose between giving you a cheek peck or receiving one from you.", "🔥 Loser: Create your own seductive dance move and give it a ridiculous name.", "👀 Loser: Pick someone and say, “You'd be trouble.”", "💋 Loser: Give someone a cheek peck and then give them a dramatic wink.", "😂 Loser: Pretend you're someone's celebrity crush.", "😏 Loser: Give your best “first date” greeting.", "🔥 Loser: Do a playful lap-dance-style chair routine for 20 seconds without touching anyone.", "😂 Loser: Explain why losing this game proves you're the most attractive person here.", "😈 Loser: Give yourself a ridiculous romantic nickname.", "💋 Loser: Give a willing player a quick cheek peck and say, “My defeat has consequences.”", "🔥 Loser: Perform a 20-second twerk battle against an imaginary opponent.", "🔥 Loser: Do your best seductive slow dance while maintaining eye contact with the camera.", "💋 Loser: Give the birthday person a cheek peck and say, “Happy birthday, superstar!”", "😂 Loser: Pretend you're being interviewed about your love life.", "😏 Loser: Give the room your best “single and available” announcement.", "💃 Loser: Perform your funniest breakdance move and finish with a dramatic pose.", "🤣 Loser: Explain why someone should date you in exactly three words.", "😈 Loser: Let the group choose your funniest nickname for the next three rounds.", "💋 Loser: Give someone a cheek peck, then run away dramatically.", "🔥 Loser: Give a 20-second “I'm single and dangerous” speech.", "😏 Loser: Pick someone and deliver your best movie-style flirtation.", "💃 Loser: Perform a 30-second seductive dance to any song the group chooses.", "😂 Loser: Pretend you've just discovered your crush is in the room.", "💋 Loser: Give the birthday person a cheek peck and say, “You owe me for making me lose!”", "🔥 Loser: Perform your best 30-second confidence dance.", "😂 Loser: Stand up and announce, “I lost Choozy, but apparently I won the flirting competition!”", "💀🔥 ULTIMATE LOSER: Do a 30-second freestyle combining twerking, breakdance, and seductive dance moves, finish with your best pose, and announce: “I ACCEPT DEFEAT… BUT I'M STILL THE MOST DANGEROUS PLAYER HERE!” 😈🔥😂"];
-let remaining = [];
-let picked = 0;
 
-const numberEl = document.getElementById('number');
-const challengeEl = document.getElementById('challenge');
-const pickBtn = document.getElementById('pick');
-const resetBtn = document.getElementById('reset');
-const statusEl = document.getElementById('status');
-const bar = document.getElementById('bar');
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function resetGame() {
-  remaining = shuffle([...allChallenges]);
-  picked = 0;
-  numberEl.textContent = 'Ready?';
-  challengeEl.textContent = 'TAP TO PICK YOUR FIRST CHALLENGE';
-  pickBtn.disabled = false;
-  pickBtn.textContent = '🎲 TAP TO PICK';
-  updateStatus();
-}
-
-function updateStatus() {
-  const left = remaining.length;
-  statusEl.textContent = left === 0 ? 'All 100 challenges completed! 🎉' : `${left} challenge${left===1?'':'s'} remaining`;
-  bar.style.width = `${left / allChallenges.length * 100}%`;
-}
-
-function pickChallenge() {
-  if (!remaining.length) return;
-  const index = Math.floor(Math.random() * remaining.length);
-  const challenge = remaining.splice(index, 1)[0];
-  picked++;
-  numberEl.textContent = `Challenge ${picked} of ${allChallenges.length}`;
-  challengeEl.textContent = challenge;
-  challengeEl.classList.remove('flash');
-  void challengeEl.offsetWidth;
-  challengeEl.classList.add('flash');
-  if (!remaining.length) {
-    pickBtn.disabled = true;
-    pickBtn.textContent = '🎉 ALL DONE!';
-  }
-  updateStatus();
-}
-
-pickBtn.addEventListener('click', pickChallenge);
-resetBtn.addEventListener('click', resetGame);
-resetGame();
-</script>
 
 <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
+
+/* =========================================================
+   TAP & PICK — AFTER DARK
+   ========================================================= */
+
+
+/* ---------- PROMPT BANK ---------- */
+
+const prompts = {
+
+flirty:[
+"Who in this room would you most naturally flirt with?",
+"Who here has the most attractive smile?",
+"Who here has the strongest eye contact?",
+"Who would you choose for a spontaneous date tonight?",
+"Who gives you the biggest crush energy?",
+"Tell someone exactly what makes them attractive.",
+"Give someone your best flirty smile for ten seconds.",
+"Give your smoothest pickup line.",
+"Choose someone and deliver a movie-style flirt.",
+"Tell someone what your first impression of them was.",
+"Who here would be hardest for you to resist?",
+"Who here looks like they would break hearts?",
+"Who has the most attractive voice?",
+"Who has the best fashion sense tonight?",
+"Give someone a sincere compliment without mentioning their appearance.",
+"Choose someone and explain why they would make a dangerous date.",
+"Maintain eye contact with someone for fifteen seconds.",
+"Give someone a dramatic wink.",
+"Tell the group your biggest flirting weakness.",
+"Describe your perfect first date.",
+"Who here would you trust to plan your dream date?",
+"Tell someone they are your type and explain why.",
+"Give your best 'I know you like me' look.",
+"Choose someone and pretend you have just met them at a bar.",
+"Describe the kind of person who instantly gets your attention.",
+"What's the most attractive personality trait?",
+"What's more attractive: confidence or mystery?",
+"What's your biggest romantic green flag?",
+"What's your biggest romantic red flag?",
+"Who was your most unexpected crush?",
+"Have you ever developed feelings for a friend?",
+"What's the boldest move you've made on someone?",
+"What's the best compliment you've ever received?",
+"What's the best compliment you've ever given?",
+"Have you ever flirted with someone just for fun?",
+"What's your favorite kind of romantic attention?",
+"Would you rather make the first move or be approached?",
+"What's more attractive: a great smile or great eyes?",
+"What's the fastest way someone can get your attention?",
+"What's one thing that instantly kills attraction?",
+"Describe your ideal romantic atmosphere.",
+"What's your favorite kind of date?",
+"Would you rather have chemistry or compatibility?",
+"What's the most attractive thing someone can say to you?",
+"Give someone your most confident introduction.",
+"Choose someone and give them a nickname based on their vibe.",
+"Who here would make the most interesting date?",
+"Tell someone what makes them stand out tonight.",
+"Give your best mysterious-stranger introduction."
+],
+
+naughty:[
+"Who here would you be most curious to kiss?",
+"Have you ever kissed someone you probably shouldn't have?",
+"What's the boldest romantic move you've ever made?",
+"What's the most unexpected place you've ever kissed someone?",
+"Have you ever had a secret crush on someone who didn't know?",
+"What's your biggest attraction guilty pleasure?",
+"What's your biggest turn-on in someone's personality?",
+"What's your biggest turn-off?",
+"Would you rather receive a surprise kiss or give one?",
+"What's the most tempting quality someone can have?",
+"Who here gives the strongest 'bad influence' energy?",
+"Tell the group about your most memorable kiss.",
+"Have you ever flirted with someone knowing they were interested?",
+"What's the closest you've come to making a very impulsive romantic decision?",
+"What's your most embarrassing crush story?",
+"Have you ever caught someone checking you out?",
+"Have you ever been caught checking someone out?",
+"What's the most daring text you've ever sent?",
+"What's the boldest compliment you've ever given someone?",
+"What's your favorite kind of flirting?",
+"Do you prefer slow-burn attraction or instant chemistry?",
+"What's more exciting: secret attraction or obvious attraction?",
+"Who here would you trust with a secret crush?",
+"Who here would be hardest to say no to?",
+"Have you ever pretended not to like someone you actually liked?",
+"Have you ever liked someone who was completely wrong for you?",
+"What's your biggest dating weakness?",
+"What's your most dangerous romantic habit?",
+"What's the most awkward romantic moment you've experienced?",
+"What's the most memorable first date you've had?",
+"Would you ever date someone your friends disliked?",
+"Would you ever kiss someone on a first date?",
+"What's one romantic boundary you never compromise on?",
+"What's something that instantly creates chemistry?",
+"Who here has the most intimidating confidence?",
+"Give someone a compliment that would make them blush.",
+"Tell someone what their most attractive feature is.",
+"Give your best seductive-but-playful smile.",
+"Choose someone and tell them why they'd be trouble.",
+"Tell someone 'You're dangerously attractive tonight.'",
+"Give a dramatic wink to someone chosen by the group.",
+"Describe your ideal romantic tension.",
+"What's your favorite way to tease someone playfully?",
+"What's the boldest thing someone could say to you?",
+"Would you rather be secretly admired or openly desired?",
+"What's the most attractive type of confidence?",
+"Have you ever had chemistry with someone you didn't expect?",
+"Tell the group about a crush you never confessed.",
+"What's one thing you find irresistible in a personality?",
+"Would you rather have a romantic secret or a public romance?"
+],
+
+wild:[
+"Choose someone and tell them why they'd be trouble on a night out.",
+"Pick someone and give them your boldest compliment.",
+"Tell the group the wildest harmless thing you've done because of attraction.",
+"Who here would you trust on a spontaneous midnight adventure?",
+"Who here looks most likely to convince you to break your routine?",
+"Give someone your best movie-scene flirt.",
+"Describe your dream spontaneous date.",
+"Tell the group your most impulsive romantic decision.",
+"Who here would you choose for a secret getaway?",
+"Give someone a challenge: make you laugh in ten seconds.",
+"Choose someone and hold eye contact for twenty seconds.",
+"Tell someone exactly what makes their vibe attractive.",
+"Let the group choose someone for you to compliment.",
+"Give your best dramatic 'come here' gesture.",
+"Tell someone why they'd make a dangerous crush.",
+"Describe your ideal chemistry with someone.",
+"Who here would you least expect to have a crush on you?",
+"Tell the group your most unexpected attraction story.",
+"Give someone a playful nickname and explain it.",
+"Who here would you choose for a spontaneous road trip?",
+"Who here has the most irresistible confidence?",
+"Tell the group your boldest dating opinion.",
+"Describe your perfect night out with a crush.",
+"Choose someone and pretend you're asking them on a first date.",
+"Give someone your best celebrity-style flirtation.",
+"Tell the person beside you their strongest attractive quality.",
+"Tell the group one thing that makes someone instantly tempting.",
+"What's the riskiest dating decision you'd consider making?",
+"Who here looks like they'd be the best secret-keeper?",
+"Who here would make the most unpredictable date?",
+"What's your most chaotic dating story?",
+"What's the closest you've come to falling for someone unexpectedly?",
+"What's the most exciting thing about a new attraction?",
+"Would you ever pursue someone you met while travelling?",
+"Would you ever go on a completely spontaneous date?",
+"Give a thirty-second confidence speech about why you're attractive.",
+"Let another player choose your next flirt target.",
+"Pick someone and give them your best 'first date' greeting.",
+"Tell someone what kind of date you think suits their personality.",
+"Who here would you choose as your partner in a dating show?",
+"Give your best dramatic romantic confession to an imaginary crush.",
+"Tell the group what makes someone unforgettable.",
+"Describe your ideal chemistry without naming anyone.",
+"What's your most controversial dating opinion?",
+"What's the most daring compliment you would actually say?",
+"Who here would be hardest to ignore at a party?",
+"Tell someone why their energy caught your attention.",
+"Give someone a compliment that sounds innocent but makes them blush.",
+"Describe the perfect romantic surprise.",
+"What's one thing you'd do differently on your next date?"
+],
+
+dare:[
+"Give someone your best flirty smile for fifteen seconds.",
+"Perform a dramatic runway walk.",
+"Give your best pickup line to someone chosen by the group.",
+"Hold eye contact with another player for twenty seconds.",
+"Give someone a sincere compliment.",
+"Do your best romantic movie entrance.",
+"Act like you just met your celebrity crush.",
+"Give a dramatic wink to someone.",
+"Perform a fifteen-second confidence dance.",
+"Give an imaginary crush a romantic speech.",
+"Let the group choose a harmless nickname for you.",
+"Do your best model pose.",
+"Give a dramatic 'I know I'm attractive' pose.",
+"Sing a romantic song for twenty seconds.",
+"Act like you're on the most awkward first date ever.",
+"Do your best impression of a flirtatious movie character.",
+"Give someone a compliment without smiling.",
+"Perform a slow-motion entrance.",
+"Let another player choose your pose.",
+"Do a funny dance chosen by the group.",
+"Give the room your best single-and-available announcement.",
+"Pretend you're filming a dating-app introduction.",
+"Give your best mysterious-stranger introduction.",
+"Do five different flirty facial expressions.",
+"Act like someone just rejected your date invitation.",
+"Give a dramatic acceptance speech for an imaginary date.",
+"Try to make another player blush using only a compliment.",
+"Give a fifteen-second romantic commercial for yourself.",
+"Act like you're trying to impress your crush.",
+"Do your best celebrity red-carpet pose.",
+"Perform a dramatic love-song lip sync.",
+"Give the person opposite you a playful compliment.",
+"Do a confident walk around the room.",
+"Create a signature flirting move.",
+"Give your funniest pickup line.",
+"Act like you've just realized your crush is watching.",
+"Give an exaggerated romantic proposal to an imaginary person.",
+"Perform your best 'heartbreaker' entrance.",
+"Let another player choose a safe dance move.",
+"Do a twenty-second freestyle dance.",
+"Give a dramatic speech about why you're single.",
+"Act like you're in a cheesy romance movie.",
+"Give someone a compliment using exactly five words.",
+"Perform your best shy-crush impression.",
+"Do a fake dating-show introduction.",
+"Give a dramatic wink and pose.",
+"Act like you're meeting someone for the first time.",
+"Make the room laugh while pretending to flirt.",
+"Give your best confident smile to the camera.",
+"End your dare with a dramatic pose."
+],
+
+confession:[
+"What's your biggest harmless crush confession?",
+"Have you ever secretly liked a friend?",
+"What's your most embarrassing flirting fail?",
+"What's your biggest dating red flag?",
+"What's your biggest dating green flag?",
+"Have you ever liked someone you knew was unavailable?",
+"What's your funniest crush story?",
+"What's the boldest message you've ever sent?",
+"What's your most awkward first-date moment?",
+"Have you ever pretended not to like someone?",
+"What's the most unexpected person you've found attractive?",
+"What's the worst pickup line you've heard?",
+"What's the best pickup line you've heard?",
+"Have you ever had feelings for someone in this room?",
+"What's something you find instantly attractive?",
+"What's something that instantly kills attraction?",
+"What's your biggest dating pet peeve?",
+"Have you ever gone back to an ex?",
+"What's the most impulsive romantic thing you've done?",
+"Have you ever regretted not making a move?",
+"What's your biggest romantic weakness?",
+"What's your funniest rejection story?",
+"Have you ever misunderstood someone's flirting?",
+"Have you ever flirted just to see what would happen?",
+"What's your most embarrassing party crush?",
+"What's your biggest 'what if' romantic situation?",
+"What's the longest you've secretly liked someone?",
+"What's one dating opinion you won't change?",
+"What's the most awkward compliment you've received?",
+"Have you ever had a crush on someone unexpected?",
+"What's your favorite kind of attention?",
+"What's your biggest fear when dating?",
+"Have you ever fallen for someone too quickly?",
+"Have you ever stayed too long in a relationship?",
+"What's the most memorable romantic surprise you've received?",
+"What's the biggest lesson you've learned from dating?",
+"What's the most ridiculous reason you've rejected someone?",
+"Have you ever rejected someone and regretted it?",
+"What's the funniest thing you've done to impress someone?",
+"What's your most chaotic dating story?",
+"Have you ever sent a message to the wrong person?",
+"What's the most embarrassing thing a crush has caught you doing?",
+"What's one secret compliment you wish someone would give you?",
+"What's your biggest romantic fantasy in the innocent sense?",
+"What's your ideal first-date conversation?",
+"What's your most unexpected attraction story?",
+"What's one thing you would never tolerate in dating?",
+"What's one thing you wish you'd done differently in love?",
+"What's the most memorable person you've ever met?",
+"What's your biggest harmless secret about dating?"
+],
+
+couples:[
+"Tell your partner what first attracted you to them.",
+"Tell your partner their most attractive quality.",
+"Hold eye contact for twenty seconds.",
+"Describe your perfect date together.",
+"Tell your partner one thing they do that makes you smile.",
+"Give your partner a sincere compliment.",
+"Describe your dream holiday together.",
+"Tell your partner your funniest memory together.",
+"Give your partner a dramatic romantic compliment.",
+"Tell your partner what makes them special.",
+"Describe your ideal evening together.",
+"Create a funny nickname for each other.",
+"Tell your partner one thing you appreciate about them.",
+"Describe your partner using three words.",
+"Tell your partner what first caught your attention.",
+"Plan an imaginary date with unlimited money.",
+"Give your partner a ten-second hype speech.",
+"Recreate your first greeting.",
+"Tell your partner your favorite memory.",
+"Finish: 'I knew you were special when...'",
+"Tell your partner one thing you want to experience together.",
+"Give each other your best romantic movie line.",
+"Tell your partner what makes them laugh.",
+"Describe your perfect weekend together.",
+"Tell your partner what you admire most about them.",
+"Choose a song that reminds you of your partner.",
+"Tell your partner one thing they do better than anyone.",
+"Describe your relationship using a movie title.",
+"Tell your partner what you are most grateful for.",
+"Give your partner a playful compliment.",
+"Tell your partner your dream date location.",
+"Describe your first impression of your partner.",
+"Tell your partner your favorite thing about their personality.",
+"Give your partner a dramatic introduction.",
+"Tell your partner what makes them unforgettable.",
+"Create a funny couple's slogan.",
+"Tell your partner your favorite shared adventure.",
+"Describe your ideal romantic surprise.",
+"Tell your partner something you don't say often enough.",
+"Give your partner your best smile.",
+"Tell your partner why you'd choose them again.",
+"Describe your relationship in five words.",
+"Tell your partner one thing you want to do together this year.",
+"Give your partner a sincere appreciation speech.",
+"Tell your partner what makes your chemistry work.",
+"Tell your partner your funniest shared moment.",
+"Describe your perfect night together.",
+"Tell your partner what makes them attractive beyond appearance.",
+"Finish: 'My favorite thing about us is...'"
+],
+
+ultimate:[
+"Choose someone and tell them why they'd be your most dangerous crush.",
+"Give someone your boldest respectful compliment.",
+"Tell the group about your most unforgettable attraction.",
+"Choose someone and maintain eye contact for thirty seconds.",
+"Tell someone exactly what makes their energy attractive.",
+"Who here would you choose for a secret date?",
+"Who here would be hardest for you to resist?",
+"Give someone a compliment designed to make them blush.",
+"Tell the group your boldest dating opinion.",
+"Describe your perfect night with a crush.",
+"Choose someone and give them your best movie-style flirt.",
+"Tell the group about a crush you never confessed.",
+"Who here would you trust with your biggest romantic secret?",
+"Give your best confident flirt without touching anyone.",
+"Tell someone why they look dangerous tonight.",
+"Choose someone and pretend you're asking them on a first date.",
+"Tell the group your most daring romantic confession.",
+"Who here has the strongest chemistry with you?",
+"Give someone a dramatic romantic compliment.",
+"Describe the kind of person who could completely distract you.",
+"Tell the group your most chaotic dating experience.",
+"Who here would you choose for a spontaneous getaway?",
+"Give your best heartbreaker speech.",
+"Choose someone and tell them what makes them memorable.",
+"Tell the group your biggest attraction weakness.",
+"Give someone your best 'you are trouble' line.",
+"Who here would you least expect to have a crush on you?",
+"Describe your ultimate romantic date.",
+"Tell someone what makes them stand out in this room.",
+"Give your best mysterious-crush confession to an imaginary person.",
+"Who here would you choose as your partner on a dating show?",
+"Tell the group the boldest move you've ever made.",
+"Choose someone and give them a thirty-second confidence compliment.",
+"Describe your ideal romantic chemistry.",
+"Who here would be your most tempting bad decision?",
+"Tell someone why they'd make an unforgettable date.",
+"Give your boldest playful pickup line.",
+"Tell the group your biggest romantic 'what if'.",
+"Choose someone and give them a dramatic wink.",
+"Who here would you want to get to know better after tonight?",
+"Give someone a compliment that would make them smile tomorrow.",
+"Tell the group your most surprising crush.",
+"Describe the person who can instantly get your attention.",
+"Choose someone and tell them their strongest attractive quality.",
+"What's the boldest romantic risk you'd actually take?",
+"Give someone your best confident introduction.",
+"Tell the group the most unexpected place you've experienced chemistry.",
+"Who here would make the most interesting first date?",
+"Give your best 'I have a secret crush on you' acting performance.",
+"Tell the group one thing that makes attraction impossible to ignore."
+]
+
+};
+
+
+/* =========================================================
+   GENERATE LARGE DECK
+   ========================================================= */
+
+let deck=[];
+
+function createDeck(){
+
+  deck=[];
+
+  const multipliers={
+    flirty:20,
+    naughty:20,
+    wild:20,
+    dare:20,
+    confession:20,
+    couples:20,
+    ultimate:20
+  };
+
+  Object.keys(prompts).forEach(category=>{
+
+    const base=prompts[category];
+
+    for(let round=0;round<multipliers[category];round++){
+
+      base.forEach((text,index)=>{
+
+        const variations=[
+          text,
+          "🔥 "+text,
+          "😈 "+text,
+          "Be bold: "+text,
+          "No overthinking: "+text
+        ];
+
+        deck.push({
+          text:variations[(round+index)%variations.length],
+          category:category
+        });
+
+      });
+
+    }
+
+  });
+
+  shuffle(deck);
+
 }
+
+
+/* =========================================================
+   SHUFFLE
+   ========================================================= */
+
+function shuffle(array){
+
+  for(let i=array.length-1;i>0;i--){
+
+    const j=Math.floor(Math.random()*(i+1));
+
+    [array[i],array[j]]=
+    [array[j],array[i]];
+
+  }
+
+  return array;
+
+}
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let remaining=[];
+let player="Player";
+let selectedCategory="all";
+
+let score=0;
+let streak=0;
+let completed=0;
+let skipped=0;
+let round=0;
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const screens={
+  home:document.getElementById("home"),
+  game:document.getElementById("game"),
+  result:document.getElementById("result")
+};
+
+const playerInput=
+  document.getElementById("playerInput");
+
+const playerDisplay=
+  document.getElementById("playerDisplay");
+
+const roundDisplay=
+  document.getElementById("roundDisplay");
+
+const categoryBadge=
+  document.getElementById("categoryBadge");
+
+const cardNumber=
+  document.getElementById("cardNumber");
+
+const question=
+  document.getElementById("question");
+
+const points=
+  document.getElementById("points");
+
+const scoreEl=
+  document.getElementById("score");
+
+const streakEl=
+  document.getElementById("streak");
+
+const progressBar=
+  document.getElementById("progressBar");
+
+const remainingEl=
+  document.getElementById("remaining");
+
+const pickBtn=
+  document.getElementById("pickBtn");
+
+
+/* =========================================================
+   CATEGORY BUTTONS
+   ========================================================= */
+
+document.querySelectorAll(".cat").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    document
+      .querySelectorAll(".cat")
+      .forEach(btn=>{
+        btn.classList.remove("selected");
+      });
+
+    button.classList.add("selected");
+
+    selectedCategory=
+      button.dataset.category;
+
+  });
+
+});
+
+
+/* =========================================================
+   START GAME
+   ========================================================= */
+
+document
+.getElementById("startBtn")
+.addEventListener("click",()=>{
+
+  player=
+    playerInput.value.trim() ||
+    "Player";
+
+  playerDisplay.textContent=
+    "👤 "+player;
+
+  createDeck();
+
+  if(selectedCategory==="all"){
+
+    remaining=[...deck];
+
+  }else{
+
+    remaining=
+      deck.filter(
+        item=>item.category===selectedCategory
+      );
+
+  }
+
+  shuffle(remaining);
+
+  score=0;
+  streak=0;
+  completed=0;
+  skipped=0;
+  round=0;
+
+  scoreEl.textContent="0";
+  streakEl.textContent="0";
+
+  showScreen("game");
+
+  resetCard();
+
+  updateProgress();
+
+});
+
+
+/* =========================================================
+   RESET CARD
+   ========================================================= */
+
+function resetCard(){
+
+  cardNumber.textContent="READY?";
+
+  question.textContent=
+    "TAP TO REVEAL YOUR FIRST CHALLENGE";
+
+  points.textContent="+10 POINTS";
+
+  categoryBadge.textContent=
+    selectedCategory==="all"
+    ? "🔥 EVERYTHING"
+    : selectedCategory.toUpperCase();
+
+  pickBtn.textContent=
+    "🎲 TAP TO PICK";
+
+}
+
+
+/* =========================================================
+   PICK
+   ========================================================= */
+
+pickBtn.addEventListener("click",()=>{
+
+  if(!remaining.length){
+
+    finishGame();
+
+    return;
+
+  }
+
+  const index=
+    Math.floor(
+      Math.random()*remaining.length
+    );
+
+  const item=
+    remaining.splice(index,1)[0];
+
+  round++;
+  completed++;
+
+  streak++;
+
+  /*
+    Base score = 10.
+    Streak bonus every 5 completed.
+  */
+
+  let earned=10;
+
+  if(streak%5===0){
+
+    earned+=10;
+
+  }
+
+  score+=earned;
+
+  scoreEl.textContent=score;
+  streakEl.textContent=streak;
+
+  cardNumber.textContent=
+    `CHALLENGE ${round}`;
+
+  categoryBadge.textContent=
+    categoryName(item.category);
+
+  question.classList.remove("animate");
+
+  void question.offsetWidth;
+
+  question.textContent=item.text;
+
+  question.classList.add("animate");
+
+  points.textContent=
+    `+${earned} POINTS`;
+
+  roundDisplay.textContent=
+    `${completed} completed • ${skipped} skipped`;
+
+  pickBtn.textContent=
+    remaining.length
+    ? "🎲 NEXT CHALLENGE"
+    : "🏆 FINISH";
+
+  updateProgress();
+
+});
+
+
+/* =========================================================
+   SKIP
+   ========================================================= */
+
+document
+.getElementById("skipBtn")
+.addEventListener("click",()=>{
+
+  if(!remaining.length)return;
+
+  remaining.splice(
+    Math.floor(
+      Math.random()*remaining.length
+    ),
+    1
+  );
+
+  skipped++;
+
+  streak=0;
+
+  streakEl.textContent="0";
+
+  roundDisplay.textContent=
+    `${completed} completed • ${skipped} skipped`;
+
+  cardNumber.textContent=
+    "SKIPPED ⏭";
+
+  question.textContent=
+    "No pressure. Your next challenge is waiting.";
+
+  points.textContent=
+    "STREAK RESET";
+
+  updateProgress();
+
+});
+
+
+/* =========================================================
+   CATEGORY NAME
+   ========================================================= */
+
+function categoryName(category){
+
+  const names={
+    flirty:"😏 FLIRTY",
+    naughty:"💋 NAUGHTY",
+    wild:"🔥 WILD",
+    dare:"😈 DARE",
+    confession:"👀 CONFESSION",
+    couples:"❤️ COUPLES",
+    ultimate:"💀 ULTIMATE"
+  };
+
+  return names[category] ||
+    "🔥 AFTER DARK";
+
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+function updateProgress(){
+
+  const total=
+    selectedCategory==="all"
+    ? deck.length
+    : deck.filter(
+        item=>item.category===selectedCategory
+      ).length;
+
+  const left=remaining.length;
+
+  const percentage=
+    total
+    ? (left/total)*100
+    : 0;
+
+  progressBar.style.width=
+    percentage+"%";
+
+  remainingEl.textContent=
+    `${left.toLocaleString()} challenge${left===1?"":"s"} remaining`;
+
+}
+
+
+/* =========================================================
+   FINISH
+   ========================================================= */
+
+function finishGame(){
+
+  document.getElementById("finalScore")
+    .textContent=score;
+
+  document.getElementById("completed")
+    .textContent=completed;
+
+  document.getElementById("skipped")
+    .textContent=skipped;
+
+  showScreen("result");
+
+}
+
+
+/* =========================================================
+   EXIT
+   ========================================================= */
+
+document
+.getElementById("homeBtn")
+.addEventListener("click",()=>{
+
+  showScreen("home");
+
+});
+
+
+/* =========================================================
+   PLAY AGAIN
+   ========================================================= */
+
+document
+.getElementById("againBtn")
+.addEventListener("click",()=>{
+
+  createDeck();
+
+  remaining=
+    selectedCategory==="all"
+    ? [...deck]
+    : deck.filter(
+        item=>item.category===selectedCategory
+      );
+
+  shuffle(remaining);
+
+  score=0;
+  streak=0;
+  completed=0;
+  skipped=0;
+  round=0;
+
+  scoreEl.textContent="0";
+  streakEl.textContent="0";
+
+  showScreen("game");
+
+  resetCard();
+
+  updateProgress();
+
+});
+
+
+/* =========================================================
+   RESULT HOME
+   ========================================================= */
+
+document
+.getElementById("resultHomeBtn")
+.addEventListener("click",()=>{
+
+  showScreen("home");
+
+});
+
+
+/* =========================================================
+   SCREEN SWITCH
+   ========================================================= */
+
+function showScreen(name){
+
+  Object.values(screens)
+    .forEach(screen=>{
+      screen.classList.remove("active");
+    });
+
+  screens[name].classList.add("active");
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================================================
+   KEYBOARD SUPPORT
+   ========================================================= */
+
+document.addEventListener("keydown",event=>{
+
+  if(event.key==="Enter" &&
+     screens.game.classList.contains("active")){
+
+    pickBtn.click();
+
+  }
+
+});
+
+
+/* =========================================================
+   INITIAL BUILD
+   ========================================================= */
+
+createDeck();
+
 </script>
+
 </body>
 </html>
